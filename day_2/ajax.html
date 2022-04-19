@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container m-5">
+        <div class="row m-5">
+            <h1 style="text-align: center;">Add Form</h1>
+            <form action="#">
+                <div class="mb-3">
+                  <label for="name" class="form-label">Name</label>
+                  <input type="text" class="form-control" id="name" aria-describedby="nameHelp">
+                </div>
+                <div class="mb-3">
+                    <label for="age" class="form-label">Age</label>
+                    <input type="number" class="form-control" id="age" aria-describedby="ageHelp">
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address </label>
+                    <input type="text" class="form-control" id="address" aria-describedby="addressHelp">
+                </div>
+                <div class="mb-3">
+                    <label for="crn" class="form-label">CRN</label>
+                    <input type="text" class="form-control" id="crn" aria-describedby="crnHelp">
+                </div>
+                <button type="submit" class="btn btn-primary" onclick="submitForm();">Submit</button>
+            </form>
+        </div>
+        <div class="row">
+            <div class="col"></div>
+            <div class="col"></div>
+            <div class="col">
+                <input type="button" class="btn btn-primary" onclick="loadDoc();" value="Get Data">
+            </div>
+            <div class="col"></div>
+            <div class="col"></div>
+        </div>
+    </div>
+    <h1 style="text-align: center;">Data</h1>
+    <!-- hidden DOM -->
+    <div class="container">
+        <table class="table" >
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Age</th>
+                <th scope="col">Address</th>
+                <th scope="col">CRN</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tablebody">
+              
+            </tbody>
+        </table>
+    </div>
+
+    <div id="edit" class="m-5 p-5" style="display: none;position: fixed;top: 100px;left: 20%;z-index: 100;box-shadow:4px 4px 12px -2px #EBEBEB ;background-color: white;">
+        <h2>Edit form</h2>
+        <form action="#">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="edit-name" aria-describedby="nameHelp">
+            </div>
+            <div class="mb-3">
+                <label for="age" class="form-label">Age</label>
+                <input type="number" class="form-control" id="edit-age" aria-describedby="ageHelp">
+            </div>
+            <div class="mb-3">
+                <label for="address" class="form-label">Address </label>
+                <input type="text" class="form-control" id="edit-address" aria-describedby="addressHelp">
+            </div>
+            <div class="mb-3">
+                <label for="crn" class="form-label">CRN</label>
+                <input type="text" class="form-control" id="edit-crn" aria-describedby="crnHelp">
+            </div>
+            <button type="submit" class="btn btn-primary" onclick="editDoc();">Submit</button>
+        </form>
+    </div>
+  </div>
+  
+      <!-- <div class="btn btn-primary" > Edit </div>
+      <div class="btn btn-danger" > Delete </div> -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script>
+        let tablebody = document.getElementById("tablebody");
+        var objId;
+        var edit = document.getElementById('edit');
+
+        const submitForm = function(){
+            var formData = {
+                name: document.getElementById('name').value,
+                age: document.getElementById('age').value,
+                address: document.getElementById('address').value,
+                CRN: document.getElementById('crn').value
+            }
+            console.log(formData);
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    // console.log("Success");
+                    alert("POSTED data to database.")
+                }
+            };
+            xhttp.open("POST", "https://intranetlab-9c605-default-rtdb.firebaseio.com/testObj.json");
+            // xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send(JSON.stringify(formData));
+        }
+
+        function loadDoc() {
+            var successBtn = "<div class='btn btn-primary' > Edit </div>"
+            var dangerBtn = "<div class='btn btn-danger' > Delete </div>"
+            tablebody.innerHTML = '';
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    let demo = document.getElementById("demo");
+                    const jsonData = this.responseText;
+                    const data = JSON.parse(jsonData);
+                    // console.log(data);
+                    for (const key in data) {  
+                        // console.log(key);  
+                            var row = document.createElement('TR');
+                            row.innerHTML += "<td>"+data[key].name+"</td>" 
+                            row.innerHTML += "<td>"+data[key].age+"</td>" 
+                            row.innerHTML += "<td>"+data[key].address+"</td>" 
+                            row.innerHTML += "<td>"+data[key].CRN+"</td>" 
+                            row.innerHTML += "<td>"+"<div class='btn btn-primary' onclick=getReq('"+key+"'); > Edit </div>"+"</td>" 
+                            row.innerHTML += "<td>"+"<div class='btn btn-danger' onclick=deleteDoc('"+key+"');> Delete </div>"+"</td>"+"</td>" 
+                            tablebody.appendChild(row);
+                    }
+                    
+                }
+            };
+            xhttp.open("GET", "https://intranetlab-9c605-default-rtdb.firebaseio.com/testObj.json", true);
+            xhttp.send();
+        }
+
+        function getReq(id){
+            objId = id;
+            edit.style.display = "block";
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var data = JSON.parse(this.responseText);
+                    document.getElementById('edit-name').value = data.name;
+                    document.getElementById('edit-crn').value = data.CRN;
+                    document.getElementById('edit-address').value = data.address;
+                    document.getElementById('edit-age').value = data.age;
+                }
+            };
+            xhttp.open("GET", "https://intranetlab-9c605-default-rtdb.firebaseio.com/testObj/"+id+".json", true);
+            xhttp.send();
+        }
+
+        function editDoc(id = objId){
+            // display edit form with data to edit on.
+            // getReq(objId);
+            var formData = {
+                name: document.getElementById('edit-name').value,
+                age: document.getElementById('edit-age').value,
+                address: document.getElementById('edit-address').value,
+                CRN: document.getElementById('edit-crn').value
+            }
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    edit.style.display = "none";
+                    console.log("PUT successfull");
+                }
+            };
+            xhttp.open("PUT", "https://intranetlab-9c605-default-rtdb.firebaseio.com/testObj/"+objId+".json", true);
+            xhttp.send(JSON.stringify(formData));
+        }
+
+        function deleteDoc(id){
+            var objId = id;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    console.log("DELETE successfull");
+                }
+            };
+            xhttp.open("DELETE", "https://intranetlab-9c605-default-rtdb.firebaseio.com/testObj/"+objId+".json");
+            xhttp.send();
+        }
+    </script>
+</body>
+</html>
