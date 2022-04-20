@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Parking</title>
+    <style>
+        .container{
+            display: flex;
+            flex-flow: row wrap;
+            justify-content: space-around;
+            padding: 40px 0;
+        }
+        .btn{
+            height: 50vh;
+            width: 50vh;
+            font-size: large;
+        }
+
+        button{
+            height: 100%;
+            width: 100%;
+            border-radius: 50%;
+            font-size: xx-large;
+        }
+
+        .btn-enter{
+            background-color: rgb(9, 142, 9);
+            color: white;
+            border: none;
+        }
+
+        .btn-exit{
+            background-color: rgba(169, 18, 18, 0.812);
+            color: white;
+            border: none;
+        }
+
+        #cost{
+            color: green;
+        }
+
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Car Parking Cost Calculator</h1>
+    <div class="container">
+        <div class="btn ">
+            <button onclick="enter();" class="btn-enter">Press to Enter</button>
+        </div>
+        <div class="btn ">
+            <button onclick="leave();" class="btn-exit">Press to Leave</button>
+        </div>
+
+        <!-- <div>
+            <label for="entrytime">Entry Time: </label>
+            <input type="time" name="entrytime" id="entrytime">
+        </div>
+        <div>
+            <label for="leavetime">Leave Time: </label>
+            <input type="time" name="leavetime" id="leavetime">
+        </div> -->
+    </div>
+    <!-- <div class="container">
+        <input type="button" id="calculate" value="Calculate"/>
+    </div> -->
+    <div class="container">
+        <h2 id="entryTime"></h2>
+        <h2 id="leaveTime"></h2>
+    </div>
+    <h1 style="text-align: center;">Cost : <span id="cost"></span></h1>
+    <script src="main.js"></script>
+</body>
+</html>
