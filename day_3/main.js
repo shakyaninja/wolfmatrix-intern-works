@@ -10,30 +10,33 @@ const addEntranceFee = () => {
 
 const addPartialHrFee = () => {
     cost = cost + 3;
-    console.log("First Partial or Full Hour Fee: +3");
+    // console.log("First Partial or Full Hour Fee: +3");
 } 
 
-const addFullHrFee = () => {
-    cost = cost + 4;
-    console.log("Secondary Partial or Full Hour Fee: +4");
+const addFullHrFee = (hr) => {
+    cost = cost + (hr * 4);
+    // console.log("Secondary Partial or Full Hour Fee: +4");
 }
 
 // for live timestamp
 const calculateCost = (time) => {
     addEntranceFee();
-    console.log(cost);
-    while(time != 0){
-        if(time <= 1){
-            addPartialHrFee();
-        }
-        else{
-            addFullHrFee();
-        }
-        time = time - 1;
-    }
+    addPartialHrFee();
+    time = time -1; //for first hour
+    addFullHrFee(time);
+    // while(time != 0){
+    //     if(time <= 1){
+    //         addPartialHrFee();
+    //     }
+    //     else{
+    //         addFullHrFee();
+    //     }
+    //     time = time - 1;
+    // }
+
     console.log("Total cost for parking is: ",cost);
     document.getElementById('cost').innerText = '$' + cost;
-    cost = 0;
+    cost = 0;   //reset cost for next calculation
 }
 
 
@@ -43,15 +46,15 @@ function calculateTime(e,l){
     var hours = Number(l.split(':')[0]) - Number(e.split(':')[0]);
     var minutes = Number(l.split(':')[1]) - Number(e.split(':')[1]);
     // condition for - ve hours
-    if(hours < 0){
-        hours = 24 - Number(l.split(':')[0]);
-        hours = hours + Number(e.split(':')[0]);
-    }
-    if(minutes < 0){
-        minutes = 60 - Number(l.split(':')[1]);
-        minutes = minutes + Number(e.split(':')[1]);
-    }
-    // condition for - ve minutes
+    // if(hours < 0){
+    //     hours = 24 - Number(l.split(':')[0]);
+    //     hours = hours + Number(e.split(':')[0]);
+    // }
+    // if(minutes < 0){
+    //     minutes = 60 - Number(l.split(':')[1]);
+    //     minutes = minutes + Number(e.split(':')[1]);
+    // }
+    // // condition for - ve minutes
     if(minutes > 30){
         // count partial hour
         hours = hours + 1;
@@ -65,7 +68,13 @@ document.getElementById('calculate').addEventListener('click',() =>{
     var entry = document.getElementById('entrytime').value;
     var leave = document.getElementById('leavetime').value;
     console.log(entry,leave);
-    calculateTime(entry,leave);
+    if(Number(leave.split(':')[0]) < Number(entry.split(":")[0])){
+        // show invalid time
+        window.alert("Sorry ! Invalid entry or leave time.");
+    }
+    else{
+        calculateTime(entry,leave);
+    }
 })
 
 const init = () => {
