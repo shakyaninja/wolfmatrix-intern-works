@@ -256,13 +256,97 @@ if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-
 }
 ```
 
-## File Handling
-
-
-
-
 ## Date/Time
 
+The PHP ``date()`` function is used to format a date and/or a time.
+
+syntax : ``date(format,timestamp)``
+
+where: 
+
+* **format** - Required. Specifies the format of the timestamp
+* **timestamp** - Optional. Specifies a timestamp. Default is the current date and time
+
+* A timestamp is a sequence of characters, denoting the date and/or time at which a certain event occurred.
+
+The required format parameter of the ``date()`` function specifies how to format the date (or time).
+
+Here are some characters that are commonly used for dates:
+
+* ``d`` - Represents the day of the month (01 to 31)
+* ``m`` - Represents a month (01 to 12)
+* ``Y`` - Represents a year (in four digits)
+* ``l`` (lowercase 'L') - Represents the day of the week
+
+Other characters, like ``/``, ``.``, or ``-`` can also be inserted between the characters to add additional formatting.
+
+```
+<?php
+echo "Today is " . date("Y/m/d") . "<br>"; //Today is 2022/04/21
+echo "Today is " . date("Y.m.d") . "<br>"; // Today is 2022.04.21
+echo "Today is " . date("Y-m-d") . "<br>"; // Today is 2022-04-21
+echo "Today is " . date("l"); // Today is Thursday
+?>
+```
+
+Here are some characters that are commonly used for times:
+
+* ``H`` - 24-hour format of an hour (00 to 23)
+* ``h`` - 12-hour format of an hour with leading zeros (01 to 12)
+* ``i`` - Minutes with leading zeros (00 to 59)
+* ``s`` - Seconds with leading zeros (00 to 59)
+* ``a`` - Lowercase Ante meridiem and Post meridiem (am or pm)
+
+```
+<?php
+echo "The time is " . date("h:i:sa");
+?>
+```
+
+For time zone:
+
+after setting default time zone.
+```
+<?php
+date_default_timezone_set("America/New_York");
+echo "The time is " . date("h:i:sa");
+?>
+```
+
+Creating date:
+
+The PHP ``mktime()`` function returns the Unix timestamp for a date. The Unix timestamp contains the number of seconds between the ``Unix Epoch (January 1 1970 00:00:00 GMT)`` and the time specified.
+
+syntax : ``mktime(hour, minute, second, month, day, year)``
+
+example:
+```
+<?php
+$d=mktime(11, 14, 54, 8, 12, 2014);
+echo "Created date is " . date("Y-m-d h:i:sa", $d);
+?>
+```
+
+Create a Date From a String :
+
+The PHP ``strtotime()`` function is used to convert a human readable date string into a Unix timestamp (the number of seconds since ``January 1 1970 00:00:00 GMT``).
+
+syntax : ``strtotime(time, now)``
+
+```
+<?php
+$d=strtotime("tomorrow");
+echo date("Y-m-d h:i:sa", $d) . "<br>"; //2022-04-22 12:00:00am
+
+$d=strtotime("next Saturday");
+echo date("Y-m-d h:i:sa", $d) . "<br>"; //2022-04-23 12:00:00am
+
+$d=strtotime("+3 Months");
+echo date("Y-m-d h:i:sa", $d) . "<br>"; //2022-07-21 09:12:40am
+?>
+```
+
+## File Handling
 
 
 
@@ -273,34 +357,45 @@ if (!preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-
 ## Cookies
 
 
-## PHP Callback functions
 
+## PHP Callback functions
 
 
 
 ## PHP JSON
 
 
+
 ## PHP Exceptions
+
 
 
 ## PHP OOP
 
 
+
 ## PHP Classes/Objects
+
+
 
 ## PHP Filters
 
+
+
 ## PHP Constructors
+
 
 
 ## PHP Destructors
 
 
+
 ## PHP Interfaces
 
 
+
 ## PHP Namespace
+
 
 
 ## PHP Iterables
