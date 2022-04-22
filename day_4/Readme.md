@@ -348,58 +348,213 @@ echo date("Y-m-d h:i:sa", $d) . "<br>"; //2022-07-21 09:12:40am
 
 ## File Handling
 
+File handling can be done by the read and write operations in file.
 
+``readfile("webdictionary.txt")``
 
-## Session
+Here, ``readfile()`` is useful for opening the file and reading its contents.
 
+Also, we can use ``fopen()`` which will give more options for handling a file.
 
+Files can be opened in following modes:
 
-## Cookies
+* r - Open a file for read only. File pointer starts at the beginning of the file
+* w - Open a file for write only. Erases the contents of the file or creates a new file if it doesn't exist. File pointer starts at the beginning of the file
+* a - Open a file for write only. The existing data in file is preserved. File pointer starts at the end of the file. Creates a new file if the file doesn't exist
+* x - Creates a new file for write only. Returns FALSE and an error if file already exists
+* r+ - Open a file for read/write. File pointer starts at the beginning of the file
+* w+ - Open a file for read/write. Erases the contents of the file or creates a new file if it doesn't exist. File pointer starts at the beginning of the file
+* a+ - Open a file for read/write. The existing data in file is preserved. File pointer starts at the end of the file. Creates a new file if the file doesn't exist
+* x+ - Creates a new file for read/write. Returns FALSE and an error if file already exists
 
+```
+<?php
+$myfile = fopen("webdictionary.txt", "r") or die("Unable to open file!");
+echo fread($myfile,filesize("webdictionary.txt"));
+fclose($myfile);
+?>
+```
 
+* ``fgets()`` - used to read a single line from a file.
+* ``feof()`` - checs if the "end-of-file"(EOF) has been reached. (used for looping through data of unknown length)
 
-## PHP Callback functions
+```
+while(!feof($myfile)) {
+  echo fgets($myfile) . "<br>";
+}
+```
 
+* ``fgetc()`` - used for reading a single character from a file.
 
+```
+while(!feof($myfile)) {
+  echo fgetc($myfile);
+}
+```
 
-## PHP JSON
+Creation of file:
 
+The ``fopen()`` function is also used to create a file. Maybe a little confusing, but in PHP, a file is created using the same function used to open files.
+Here, it will create a new file called "testfile.txt".
 
+``$myfile = fopen("testfile.txt", "w")``
 
-## PHP Exceptions
+Writing a file:
 
+``fwrite()`` is the function used to write a file with two parameters:
+1. Name of the file to write to 
+2. String to be written
 
+```
+<?php
+$myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
+$txt = "John Doe\n";
+fwrite($myfile, $txt);
+$txt = "Jane Doe\n";
+fwrite($myfile, $txt);
+fclose($myfile);
+?>
+```
 
-## PHP OOP
+* Overwriting the file is don by opening the file in ``"w"`` write mode from ``fopen()``.
 
+Uploading file with PHP in server:
 
+* With PHP, it is easy to upload files to the server.
 
-## PHP Classes/Objects
+However, **with ease comes danger, so always be careful when allowing file uploads!**
 
+* Configure The "php.ini" File:
 
+1. First, ensure that PHP is configured to allow file uploads.
+2. In your "php.ini" file, search for the file_uploads directive, and set it to On as: 
+``file_uploads = On``
 
-## PHP Filters
+Some rules to follow for the HTML form above:
 
+* Make sure that the form uses method="post"
+* The form also needs the following attribute: ``enctype="multipart/form-data"``. ( It specifies which content-type to use when submitting the form )
 
+Then, Create The Upload File PHP Script
+The "upload.php" file contains the code for uploading a file:
+```
+<?php
+$target_dir = "uploads/";
+$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+$uploadOk = 1;
+$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+// Check if image file is a actual image or fake image
+if(isset($_POST["submit"])) {
+  $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+  if($check !== false) {
+    echo "File is an image - " . $check["mime"] . ".";
+    $uploadOk = 1;
+  } else {
+    echo "File is not an image.";
+    $uploadOk = 0;
+  }
+}
+?>
+```
 
-## PHP Constructors
+Here, following thing are:
+* ``$target_dir = "uploads/"`` - specifies the directory where the file is going to be placed
+* ``$target_file`` specifies the path of the file to be uploaded
+* ``$uploadOk=1`` is not used yet (will be used later)
+* ``$imageFileType`` holds the file extension of the file (in lower case)
+* Next, check if the image file is an actual image or a fake image
 
+To check if the file already exists we can do it by:
 
+``file_exists(__targetedFile__)`` function checks if there is already file with targeted name or not. Where ``__targetedFile__`` is the full path of image from server root to filename. 
 
-## PHP Destructors
+```
+// Check if file already exists
+if (file_exists($target_file)) {
+  echo "Sorry, file already exists.";
+  $uploadOk = 0;
+}
+```
 
+To Limit the uploading file size we can do it by:
 
+``$_FILES["__finename__"][size]`` contains the file size .
 
-## PHP Interfaces
+```
+// Check file size
+if ($_FILES["fileToUpload"]["size"] > 500000) {
+  echo "Sorry, your file is too large.";
+  $uploadOk = 0;
+}
+```
 
+To Limit the upload file types to certain extensions only:
 
+Also we can define array of allowed file types as:
 
-## PHP Namespace
+```
+// Allow certain file formats
+if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+&& $imageFileType != "gif" ) {
+  echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+  $uploadOk = 0;
+}
+```
 
+``$ALLOWED_FILES = array('jpg','png','gif'...)``
 
+then, check if the extension of uploaded file is in array or not.
 
-## PHP Iterables
+Complete script for the proper upload of file is:
 
+```
+<?php
+$target_dir = "uploads/";
+$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+$uploadOk = 1;
+$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
+// Check if image file is a actual image or fake image
+if(isset($_POST["submit"])) {
+  $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+  if($check !== false) {
+    echo "File is an image - " . $check["mime"] . ".";
+    $uploadOk = 1;
+  } else {
+    echo "File is not an image.";
+    $uploadOk = 0;
+  }
+}
 
-# MySQL Database Basics
+// Check if file already exists
+if (file_exists($target_file)) {
+  echo "Sorry, file already exists.";
+  $uploadOk = 0;
+}
+
+// Check file size
+if ($_FILES["fileToUpload"]["size"] > 500000) {
+  echo "Sorry, your file is too large.";
+  $uploadOk = 0;
+}
+
+// Allow certain file formats
+if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+&& $imageFileType != "gif" ) {
+  echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+  $uploadOk = 0;
+}
+
+// Check if $uploadOk is set to 0 by an error
+if ($uploadOk == 0) {
+  echo "Sorry, your file was not uploaded.";
+// if everything is ok, try to upload file
+} else {
+  if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+    echo "The file ". htmlspecialchars( basename( $_FILES["fileToUpload"]["name"])). " has been uploaded.";
+  } else {
+    echo "Sorry, there was an error uploading your file.";
+  }
+}
+?>
+```
