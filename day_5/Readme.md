@@ -565,8 +565,9 @@ $strawberry->intro();
 ?>
 ```
 
-Here Inheritance also affects the access modifiers of parent class as no protected properties and methods are shared or accessible to the derived classes.
+Here Inheritance also affects the access modifiers of parent class as protected properties and methods are shared or accessible within class or to the derived classes only.
 
+when called protected method ``intro()`` outside derived class.
 ```
 <?php
 class Fruit {
@@ -594,13 +595,233 @@ $strawberry->intro(); // ERROR. intro() is protected
 ?>
 ```
 
+when called protected method ``intro()`` inside derived class.
+
+```
+<?php
+class Fruit {
+  public $name;
+  public $color;
+  public function __construct($name, $color) {
+    $this->name = $name;
+    $this->color = $color;
+  }
+  protected function intro() {
+    echo "The fruit is {$this->name} and the color is {$this->color}.";
+  }
+}
+
+class Strawberry extends Fruit {
+  public function message() {
+    echo "Am I a fruit or a berry? ";
+    // Call protected method from within derived class - OK
+    $this -> intro();
+  }
+}
+
+$strawberry = new Strawberry("Strawberry", "red"); // OK. __construct() is public
+$strawberry->message(); // OK. message() is public and it calls intro() (which is protected) from within the derived class
+?>
+```
+
+Inheritance Overriding:
+
+```
+<?php
+class Fruit {
+  public $name;
+  public $color;
+  public function __construct($name, $color) {
+    $this->name = $name;
+    $this->color = $color;
+  }
+  public function intro() {
+    echo "The fruit is {$this->name} and the color is {$this->color}.";
+  }
+}
+
+class Strawberry extends Fruit {
+  public $weight;
+  public function __construct($name, $color, $weight) {
+    $this->name = $name;
+    $this->color = $color;
+    $this->weight = $weight;
+  }
+  public function intro() {
+    echo "The fruit is {$this->name}, the color is {$this->color}, and the weight is {$this->weight} gram.";
+  }
+}
+
+$strawberry = new Strawberry("Strawberry", "red", 50);
+$strawberry->intro();
+?>
+```
+
+Preventing inheritance overriding using ``final`` keyword.
+
+```
+<?php
+class Fruit {
+  final public function intro() {
+    // some code
+  }
+}
+
+class Strawberry extends Fruit {
+  // will result in error
+  public function intro() {
+    // some code
+  }
+}
+?>
+```
+
+### PHP Class Constants
+
+Constants cannot be changed once it is declared.
+
+Class constants can be useful if you need to define some constant data within a class.
+
+A class constant is declared inside a class with the const keyword.
+
+Class constants are case-sensitive. However, it is recommended to name the constants in all uppercase letters.
+
+We can access a constant from outside the class by using the class name followed by the scope resolution operator (::) followed by the constant name, like here:
+
+```
+<?php
+class Goodbye {
+  const LEAVING_MESSAGE = "Thank you for visiting W3Schools.com!";
+}
+
+echo Goodbye::LEAVING_MESSAGE;
+?>
+```
+OR
+```
+<?php
+class Goodbye {
+  const LEAVING_MESSAGE = "Thank you for visiting W3Schools.com!";
+  public function byebye() {
+    echo self::LEAVING_MESSAGE;
+  }
+}
+
+$goodbye = new Goodbye();
+$goodbye->byebye();
+?>
+```
+
+### PHP Abstract classes
+
+Abstract classes and methods are when the parent class has a named method, but need its child class(es) to fill out the tasks.
+
+An abstract class is a class that contains at least one abstract method. An abstract method is a method that is declared, but not implemented in the code.
+
+An abstract class or method is defined with the abstract keyword:
+
+```
+<?php
+abstract class ParentClass {
+  abstract public function someMethod1();
+  abstract public function someMethod2($name, $color);
+  abstract public function someMethod3() : string;
+}
+?>
+```
+
 ### PHP Interfaces
 
+Interfaces allow you to specify what methods a class should implement.
 
+Interfaces make it easy to use a variety of different classes in the same way. When one or more classes use the same interface, it is referred to as "polymorphism".
 
-## PHP Namespace
+Interfaces are declared with the ``interface`` keyword:
 
+```
+<?php
+interface InterfaceName {
+  public function someMethod1();
+  public function someMethod2($name, $color);
+  public function someMethod3() : string;
+}
+?>
+```
 
+To implement an interface, a class must use the ``implements`` keyword.
+
+A class that implements an interface must implement all of the interface's methods.
+
+```
+<?php
+interface Animal {
+  public function makeSound();
+}
+
+class Cat implements Animal {
+  public function makeSound() {
+    echo "Meow";
+  }
+}
+
+$animal = new Cat();
+$animal->makeSound();
+?>
+```
+
+Interface are similar to abstract classes. The **difference between interfaces and abstract classes** are:
+
+* Interfaces cannot have properties, while abstract classes can
+* All interface methods must be public, while abstract class methods is public or protected
+* All methods in an interface are abstract, so they cannot be implemented in code and the abstract keyword is not necessary
+* Classes can implement an interface while inheriting from another class at the same time
+
+## PHP traits
+
+PHP only supports single inheritance: a child class can inherit only from one single parent.
+
+So, what if a class needs to inherit multiple behaviors? OOP traits solve this problem.
+
+Traits are used to declare methods that can be used in multiple classes. Traits can have methods and abstract methods that can be used in multiple classes, and the methods can have any access modifier (public, private, or protected).
+
+Traits are declared with the ``trait`` keyword:
+
+Multiple triats can be used as:
+
+```
+<?php
+trait message1 {
+  public function msg1() {
+    echo "OOP is fun! ";
+  }
+}
+
+trait message2 {
+  public function msg2() {
+    echo "OOP reduces code duplication!";
+  }
+}
+
+class Welcome {
+  use message1;
+}
+
+class Welcome2 {
+  use message1, message2;
+}
+
+$obj = new Welcome();
+$obj->msg1();
+echo "<br>";
+
+$obj2 = new Welcome2();
+$obj2->msg1();
+$obj2->msg2();
+?>
+```
+
+* Static properties can be called directly - without creating an instance of a class.
+* Static methods can be called directly - without creating an instance of a class.
 
 ## PHP Iterables
 
