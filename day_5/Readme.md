@@ -223,11 +223,64 @@ if (!filter_var($url, FILTER_VALIDATE_URL) === false) {
 
 ## PHP Callback functions
 
+A callback function (often referred to as just "callback") is a function which is passed as an argument into another function.
 
+Any existing function can be used as a callback function. To use a function as a callback function, pass a string containing the name of the function as the argument of another function:
+
+```
+<?php
+$strings = ["apple", "orange", "banana", "coconut"];
+$lengths = array_map( function($item) { return strlen($item); } , $strings);
+print_r($lengths);
+?>
+```
 
 ## PHP JSON
 
+PHP has some built-in functions to handle JSON.
 
+JSON operations in PHP are following two functions:
+
+* ``json_encode()`` - used to encode a value to JSON format.
+* ``json_decode()`` - used to decode a JSON value to PHP object or Associative array.
+
+JSON encoding:
+
+```
+<?php
+$age = array("Peter"=>35, "Ben"=>37, "Joe"=>43);
+
+echo json_encode($age);
+?>
+```
+
+JSON decoding into PHP object:
+
+```
+<?php
+$jsonobj = '{"Peter":35,"Ben":37,"Joe":43}';
+
+$obj = json_decode($jsonobj);
+
+echo $obj->Peter;
+echo $obj->Ben;
+echo $obj->Joe;
+?>
+```
+
+JSON decoding into associative array:
+
+```
+<?php
+$jsonobj = '{"Peter":35,"Ben":37,"Joe":43}';
+
+$arr = json_decode($jsonobj, true);
+
+echo $arr["Peter"];
+echo $arr["Ben"];
+echo $arr["Joe"];
+?>
+```
 
 ## PHP Exceptions
 
