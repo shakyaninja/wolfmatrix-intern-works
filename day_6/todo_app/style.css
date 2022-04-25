@@ -1,0 +1,14 @@
+.form-fixed{
+    min-height: 50vh;
+    position: fixed;
+    bottom:10%;
+    left: 2%;
+    background-color: white;
+    /* border: 1px solid black; */
+    border-radius: 10px;
+}
+
+.done{
+    width: 60px !important;
+    height: 60px !important;
+}
