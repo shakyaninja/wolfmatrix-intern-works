@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+.counter-box{
+    min-height: 100vh;
+    font-family: 'Poppins';
+}
+
+.counter{
+    font-size: 126pt;
+    font-weight: 900;
+    color: cadetblue;
+}
+
+.count-btn{
+    font-size: 32pt;
+    font-weight: 500;
+    height: 200px;
+    width: 200px;
+    background-color: cadetblue;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    box-shadow: 1px 0px 16px 1px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 1px 0px 16px 1px rgba(0,0,0,0.75);
+    -moz-box-shadow: 1px 0px 16px 1px rgba(0,0,0,0.75);
+    transition: all ease-in-out 0.4s ;
+}
+.count-btn:hover{
+    cursor: pointer;
+    height: 210px;
+    width: 210px;
+    box-shadow: 1px 0px 42px 10px rgba(0,0,0,0.75);
+    -webkit-box-shadow: 1px 0px 42px 10px rgba(0,0,0,0.75);
+    -moz-box-shadow: 1px 0px 42px 10px rgba(0,0,0,0.75);
+}

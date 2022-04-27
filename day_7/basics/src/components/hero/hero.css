@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+.hero{
+    min-height: 100vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-flow: column;
+    font-family: 'Poppins';
+    background-color: bisque;
+}
+
+p{
+    font-size: 12pt;
+    width: 80%;
+}
