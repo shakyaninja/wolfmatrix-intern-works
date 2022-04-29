@@ -55,6 +55,65 @@ class App extends Component {
     }
   }
 
+  delRender = (id,done) => {
+    if(done){
+      // find task with id inside doneTasks
+      this.state.doneTasks.forEach((element,index) => {
+        // console.log(element);
+        if(element.id === id){
+           this.state.doneTasks.splice(index,1);
+           this.setState({
+            doneTasks: [...this.state.doneTasks],
+          })
+        }
+      });
+      
+    }else{
+      // find task with id inside todoTasks
+      this.state.todoTasks.forEach((element,index) => {
+        // console.log(element);
+        if(element.id === id){
+          this.state.todoTasks.splice(index,1);
+          this.setState({
+              todoTasks: [...this.state.todoTasks],
+            })
+        }
+      });
+    }
+  }
+
+  updateRender = (id,data,done) => {
+    // console.log("here update render is done");
+    if(done){
+      // find task with id inside doneTasks
+      this.state.doneTasks.forEach((element,index) => {
+        // console.log(element);
+        if(element.id === id){
+          var spliced = this.state.doneTasks.splice(index,1);
+          spliced[0].title = data.title;
+          spliced[0].description = data.description;
+           this.setState({
+            doneTasks: [...this.state.doneTasks,spliced[0]],
+          })
+        }
+      });
+      
+    }else{
+      // find task with id inside todoTasks
+      this.state.todoTasks.forEach((element,index) => {
+        // console.log(element);
+        if(element.id === id){
+          var spliced = this.state.todoTasks.splice(index,1);
+          spliced[0].title = data.title;
+          spliced[0].description = data.description;
+          this.setState({
+              todoTasks: [...this.state.todoTasks,spliced[0]],
+            })
+        }
+      });
+    }
+  }
+
   fetchTodoTasks = () => {
     var todoTasks = [];
     var xhttp = new XMLHttpRequest();
@@ -144,6 +203,8 @@ addTask = (data) => {
     this.pushTask(newTask);
   }
 
+
+
   render() {
     // console.log("Todo tasks");
     // console.log(this.state.todoTasks);
@@ -160,7 +221,7 @@ addTask = (data) => {
               {
                 this.state.todoTasks.map((element)=>{
                     return (
-                        <Task onDone={this.rerender} done={false} title={element.title} description={element.description} id={element.id} ></Task>
+                        <Task onUpdate={this.updateRender} onDelete={this.delRender} onDone={this.rerender} done={false} title={element.title} description={element.description} id={element.id} ></Task>
                     )
                 })
               }
@@ -175,7 +236,7 @@ addTask = (data) => {
               {
                 this.state.doneTasks.map((element)=>{
                     return (
-                        <Task onDone={this.rerender} done={true} title={element.title} description={element.description} id={element.id} ></Task>
+                        <Task onUpdate={this.updateRender} onDone={this.rerender} done={true} title={element.title} description={element.description} id={element.id} ></Task>
                     )
                 })
               }

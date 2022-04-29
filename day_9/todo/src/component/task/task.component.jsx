@@ -1,18 +1,29 @@
 import React from 'react'
 import { Button, Collapse, Space} from 'antd';
-import { CheckOutlined,StopOutlined,EditOutlined } from '@ant-design/icons';
-import {AddTaskForm} from '../addTask/addTask.component';
+import { CheckOutlined,StopOutlined,DeleteFilled } from '@ant-design/icons';
+import { UpdateTaskPage } from '../updateTask/updateTask.component';
 const { Panel } = Collapse;
 
 import './task.css';
 
 
-const edit = (props) =>{
-    // console.log(props);
-    // var values = {
-    //     title: props.title,
-    //     description: props.description
-    // }
+const edit = (props,id,data) =>{
+    console.log(id);
+    fetch('http://todoapi/update.php?id='+id,{
+        method: 'POST',
+        mode : 'cors',
+        body: JSON.stringify(data)
+        })
+        .then((res)=>{
+            if(res.status === 201){
+                // re render frame
+                // console.log(res);
+                data.onUpdate(id,data,props.done);
+            }
+        })
+        .catch((err)=>{
+            console.log(err);
+        })
 }
 
 const done = (props) =>{
@@ -61,6 +72,24 @@ const done = (props) =>{
     }
 }
 
+const remove = (props) => {
+    props.onDelete(props.id,props.done);
+    // fetch to delete task with id
+    fetch('http://todoapi/delete.php?id='+props.id,{
+            method: 'DELETE',
+            mode : 'cors'
+          })
+            .then((res)=>{
+                if(res.status === 201){
+                  // re render frame
+                //   console.log(res);
+                    props.onDelete(props.id,props.done);
+                }
+            })
+            .catch((err)=>{
+              console.log(err);
+            })
+}
 
 function Task(props) {
   return (
@@ -70,13 +99,13 @@ function Task(props) {
                 <Panel header={props.title} >
                     <p>{props.description}</p>
                     <Space>
-                        <Button type="default" icon={<EditOutlined />}  onClick={() => {edit(props)}}>Edit</Button>
+                        <UpdateTaskPage data={props} updateTask={edit}></UpdateTaskPage>
                         <Button type="primary" icon={props.done?<StopOutlined />:<CheckOutlined />}  onClick={() => {done(props)}}>{props.done?"Not Done":"Done"}</Button>
+                        <Button type="danger" icon={<DeleteFilled />}  onClick={() => {remove(props)}}>Delete</Button>
                     </Space>
                 </Panel>
             </Collapse>
         </Space>
-        <AddTaskForm></AddTaskForm>
     </div>
   )
 }

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Button, Modal, Form, Input } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 
-const AddTaskForm = ({ visible, onCreate, onCancel }) => {
+const UpdateTaskForm = ({ visible, onUpdate, onCancel ,data}) => {
   const [form] = Form.useForm();
   return (
     <Modal
       visible={visible}
-      title="Create a new Task"
-      okText="Create"
+      title="Update a Task"
+      okText="Update"
       cancelText="Cancel"
       onCancel={onCancel}
       onOk={() => {
@@ -15,7 +16,7 @@ const AddTaskForm = ({ visible, onCreate, onCancel }) => {
           .validateFields()
           .then((values) => {
             form.resetFields();
-            onCreate(values);
+            onUpdate(values);
           })
           .catch((info) => {
             console.log('Validate Failed:', info);
@@ -37,49 +38,59 @@ const AddTaskForm = ({ visible, onCreate, onCancel }) => {
             },
           ]}
         >
-          <Input />
+          <Input 
+              defaultValue={data.title}
+          />
         </Form.Item>
         <Form.Item name="description" label="Description">
-          <Input type="textarea" />
+          <Input type="textarea" defaultValue={data.description}/>
         </Form.Item>
       </Form>
     </Modal>
   );
 };
 
-const AddTaskPage = (props) => {
+const UpdateTaskPage = (props) => {
   const [visible, setVisible] = useState(false);
 
-  const onCreate = (values) => {
-    // fetch api here to post data 
-    props.addTask(values);
+  const onUpdate = (values) => {
+    // props.addTask(values);
+    // console.log("onUpdate called values:",values,props.data.id);
+    var updatedData = {
+      title: values.title,
+      description: values.description
+    }
+    // fetch api here to update data 
+    props.updateTask(props,props.data.id,updatedData);
+
     setVisible(false);
   };
 
   return (
     <div>
       <Button
-        type="primary"
+        type="default"
         onClick={() => {
           setVisible(true);
         }}
-        className="new-task-btn"
-       
+        icon={<EditOutlined />}
       >
-        New Task
+
+        Edit
       </Button>
-      <AddTaskForm
+      <UpdateTaskForm
         visible={visible}
-        onCreate={onCreate}
+        onUpdate={onUpdate}
         onCancel={() => {
           setVisible(false);
         }}
+        data={props.data}
       />
     </div>
   );
 };
 
 export {
-  AddTaskPage,
-  AddTaskForm
+  UpdateTaskPage,
+  UpdateTaskForm
 } 
