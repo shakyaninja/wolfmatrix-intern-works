@@ -83,8 +83,9 @@ class App extends Component {
   }
 
   updateRender = (id,data,done) => {
-    // console.log("here update render is done");
+    console.log("here update render is done");
     if(done){
+      console.log(data);
       // find task with id inside doneTasks
       this.state.doneTasks.forEach((element,index) => {
         // console.log(element);

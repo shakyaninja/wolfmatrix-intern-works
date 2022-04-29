@@ -8,7 +8,7 @@ import './task.css';
 
 
 const edit = (props,id,data) =>{
-    console.log(id);
+    console.log(props);
     fetch('http://todoapi/update.php?id='+id,{
         method: 'POST',
         mode : 'cors',
@@ -18,7 +18,7 @@ const edit = (props,id,data) =>{
             if(res.status === 201){
                 // re render frame
                 // console.log(res);
-                data.onUpdate(id,data,props.done);
+                props.data.onUpdate(id,data,props.data.done);
             }
         })
         .catch((err)=>{
@@ -76,7 +76,7 @@ const remove = (props) => {
     props.onDelete(props.id,props.done);
     // fetch to delete task with id
     fetch('http://todoapi/delete.php?id='+props.id,{
-            method: 'DELETE',
+            method: 'GET',
             mode : 'cors'
           })
             .then((res)=>{
