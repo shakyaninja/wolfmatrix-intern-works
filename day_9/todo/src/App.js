@@ -236,7 +236,7 @@ addTask = (data) => {
               {
                 this.state.doneTasks.map((element)=>{
                     return (
-                        <Task onUpdate={this.updateRender} onDone={this.rerender} done={true} title={element.title} description={element.description} id={element.id} ></Task>
+                        <Task onUpdate={this.updateRender} onDelete={this.delRender} onDone={this.rerender} done={true} title={element.title} description={element.description} id={element.id} ></Task>
                     )
                 })
               }
