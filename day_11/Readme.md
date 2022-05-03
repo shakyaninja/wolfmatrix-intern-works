@@ -199,3 +199,34 @@ invoices
 </QueryNavLink>
 ))
 ```
+
+
+
+# React Redux
+
+Redux is a pattern and library for managing and updating application state, using events called "actions". It serves as a centralized store for state that needs to be used across your entire application, with rules ensuring that the state can only be updated in a predictable fashion.
+
+The patterns and tools provided by Redux make it easier to understand when, where, why, and how the state in your application is being updated, and how your application logic will behave when those changes occur. Redux guides you towards writing code that is predictable and testable, which helps give you confidence that your application will work as expected.
+
+Redux helps you deal with shared state management, but like any tool, it has tradeoffs. There are more concepts to learn, and more code to write. It also adds some indirection to your code, and asks you to follow certain restrictions. It's a trade-off between short term and long term productivity.
+
+Redux is more useful when:
+
+* You have large amounts of application state that are needed in many places in the app
+* The app state is updated frequently over time
+* The logic to update that state may be complex
+* The app has a medium or large-sized codebase, and might be worked on by many people
+
+The Redux Store
+The center of every Redux application is the store. A "store" is a container that holds your application's global state.
+
+A store is a JavaScript object with a few special functions and abilities that make it different than a plain global object:
+
+* You must never directly modify or change the state that is kept inside the Redux store
+* Instead, the only way to cause an update to the state is to create a plain action object that describes "something that happened in the application", and then dispatch the action to the store to tell it what happened.
+* When an action is dispatched, the store runs the root reducer function, and lets it calculate the new state based on the old state and the action
+* Finally, the store notifies subscribers that the state has been updated so the UI can be updated with the new data.
+
+State, Actions, and Reducers
+
+![Data flow] (https://d33wubrfki0l68.cloudfront.net/01cc198232551a7e180f4e9e327b5ab22d9d14e7/b33f4/assets/images/reduxdataflowdiagram-49fa8c3968371d9ef6f2a1486bd40a26.gif "Data flow in react redux")
