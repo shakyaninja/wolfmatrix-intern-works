@@ -1,0 +1,7 @@
+#updateForm{
+    position: fixed;
+    top: 20%;
+    left: 20%;
+    z-index: 5;
+}
+

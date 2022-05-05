@@ -1,7 +1,7 @@
 import {ContactActionTypes} from '../actions/contact.acts';
 
 export default function contactReducer(state = [], action){
-    console.log("action: ",action);
+    // console.log("action: ",action);
     switch (action.type){
       case ContactActionTypes.CREATE:
         var ret = [
@@ -11,12 +11,17 @@ export default function contactReducer(state = [], action){
         return ret;
 
       case ContactActionTypes.DELETE:
-        console.log("here");
-        var rets = state.filter((data, i) => i !== action.id);
-        console.log("filtered array:",rets);
-        return rets;
+        return state.filter((data, i) => i !== action.id);
+
+      case ContactActionTypes.EDIT:
+        var filtered = state.filter((data, i) => i !== action.id);
+        var ret = [
+          ...filtered,
+          action.contacts
+        ]
+        return ret;
         
       default:
-            return state;
+        return state;
     }
   };

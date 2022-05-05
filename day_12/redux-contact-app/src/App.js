@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Contacts from './components/contacts/contacts';
 import {connect} from 'react-redux';
-import {createContact,deleteContact} from './actions/contact.acts';
+import {createContact,deleteContact, editContact} from './actions/contact.acts';
 
 class App extends Component {
   constructor(props){
@@ -23,7 +23,7 @@ class App extends Component {
   // }
 
   componentDidMount(){
-    console.log("props: ",this.props);
+    // console.log("props: ",this.props);
     // console.log(this.state);
   }
 
@@ -62,14 +62,29 @@ class App extends Component {
     //     contact: ''
     //   }
     // });
+
+    // Redux call 
     this.props.createContact(contact);
+
   }
 
   deleteContact = (e, index) => {
     e.preventDefault();
-    console.log("delete contact index: ",index);
+    // console.log("delete contact index: ",index);
     this.props.deleteContact(index);
   }
+
+  editContact = (e, index) => {
+    e.preventDefault();
+    var contact = {
+      name: "luja Shakya",
+      contact: "9860685929"
+    }
+    // contact.name = e.target.value
+    console.log("edit contact index: ",index);
+    this.props.editContact(index,contact);
+  }
+
 
   render() {
     return (
@@ -84,14 +99,14 @@ class App extends Component {
           </form>
         </div>
         <hr />
-        <Contacts contacts={this.props.contacts} deleteContact={this.deleteContact}></Contacts>
+        <Contacts contacts={this.props.contacts} deleteContact={this.deleteContact} editContact={this.editContact}></Contacts>
       </div>
     );
   }
 }
 
 const mapStateToProps = (state, ownProps) => {
-  console.log("mapStateToProps: ",state);
+  // console.log("mapStateToProps: ",state);
   return {
     contacts: state.contact
   }
@@ -100,7 +115,8 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     createContact: contact => dispatch(createContact(contact)),
-    deleteContact: index =>dispatch(deleteContact(index))
+    deleteContact: index =>dispatch(deleteContact(index)),
+    editContact: (index,contact) => dispatch(editContact(index,contact))
   }
 }
 

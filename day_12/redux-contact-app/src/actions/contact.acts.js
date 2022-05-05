@@ -1,8 +1,7 @@
 export const ContactActionTypes = {
-    CREATE_SUCCESS: "CREATE_SUCCESS",
-    DELETE_SUCCESS: "DELETE_SUCCESS",
     CREATE: "CREATE",
-    DELETE: "DELETE"
+    DELETE: "DELETE",
+    EDIT: "EDIT"
 }
 
 export const createContact = (contact) => {
@@ -17,4 +16,12 @@ export const deleteContact = (id) => {
         type: ContactActionTypes.DELETE,
         id: id
     }
+}
+
+export const editContact = (id,contact) => {
+  return {
+    type: ContactActionTypes.EDIT,
+    id: id,
+    contacts: contact
+  }
 }
