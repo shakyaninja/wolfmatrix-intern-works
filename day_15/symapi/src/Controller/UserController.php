@@ -16,7 +16,7 @@ use Symfony\Component\Serializer\Serializer;
 #[Route('/user', name: 'user.')]
 class UserController extends AbstractController
 {
-    #[Route('/', name: 'get')]
+    #[Route('/', name: 'index')]
     public function index(ManagerRegistry $doctrine,Request $request): Response
     {
         $encoder = [new JsonEncoder()];
@@ -26,7 +26,28 @@ class UserController extends AbstractController
         $id = $request->query->get('id');
         $method = $request->getMethod();
 
-        if($method === 'GET'){
+        if($method === 'POST'){
+            $em = $doctrine->getManager();
+
+            $user = new User();
+
+            $data = json_decode($request->getContent(),true);
+
+            $user->setName($data['name']);
+            $user->setEmail($data['email']);
+            $user->setPassword(md5($data['password']));
+            $user->setUsername($data['username']);
+
+            $em->persist($user);
+            $em->flush();
+
+            return $this->json([
+                'message' => 'user is created here',
+                'path' => 'src/Controller/UserController.php',
+            ]);
+        }
+
+        else if($method === 'GET'){
             if(!empty($id)){
 
                 $user = $doctrine->getRepository(User::class)->find($id);
@@ -88,28 +109,5 @@ class UserController extends AbstractController
                 'message' => 'Deleted user succesfully',
             ],200, ["Content-Type" => "application/json"]);
         }
-    }
-
-    #[Route('/create', name: 'create')]
-    public function create(ManagerRegistry $doctrine,Request $request): Response
-    {
-
-        $em = $doctrine->getManager();
-
-        $user = new User();
-
-        $data = json_decode($request->getContent(),true);
-        $user->setName($data['name']);
-        $user->setEmail($data['email']);
-        $user->setPassword(md5($data['password']));
-        $user->setUsername($data['username']);
-
-        $em->persist($user);
-        $em->flush();
-
-        return $this->json([
-            'message' => 'user is created here',
-            'path' => 'src/Controller/UserController.php',
-        ]);
     }
 }

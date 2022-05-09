@@ -21,6 +21,7 @@ class AddPostCommand extends Command
         $this
             ->addArgument('title', InputArgument::OPTIONAL, 'Title for post')
             ->addArgument('content', InputArgument::OPTIONAL, 'content for post')
+            ->addArgument('description', InputArgument::OPTIONAL, 'Description for post')
             ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
         ;
     }
@@ -30,6 +31,7 @@ class AddPostCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $title = $input->getArgument('title');
         $content = $input->getArgument('content');
+        $description = $input->getArgument('description');
 
         if ($title) {
             $io->note(sprintf('You passed an title: %s', $title));
@@ -37,6 +39,10 @@ class AddPostCommand extends Command
 
         if ($content) {
             $io->note(sprintf('You passed an content: %s', $content));
+        }
+
+        if ($description) {
+            $io->note(sprintf('You passed an description: %s', $description));
         }
 
         if ($input->getOption('option1')) {
