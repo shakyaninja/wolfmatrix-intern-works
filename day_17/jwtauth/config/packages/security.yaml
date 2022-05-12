@@ -2,7 +2,13 @@ security:
     enable_authenticator_manager: true
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+        # auto hasher with default options for the User class (and children)
+        App\Entity\User: 'auto'
+
+        # auto hasher with custom options for all PasswordAuthenticatedUserInterface instances
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+            algorithm: 'auto'
+            cost:      15
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         # used to reload user from session & other features (e.g. switch_user)
@@ -17,17 +23,19 @@ security:
             security: false
 
         login:
-            pattern: ~/api/login
-            stateless: true
+            pattern: ^/api/login
+            # stateless: true
             json_login:
-                check_path: ~/api/login_check
+                check_path: /api/login_check
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
         api:
             pattern:   ~/api
-            stateless: true
+            # stateless: true
+            provider: app_user_provider
             jwt: ~
+
 
         main:
             lazy: true

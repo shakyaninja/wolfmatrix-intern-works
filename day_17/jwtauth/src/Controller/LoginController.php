@@ -9,12 +9,32 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 class LoginController extends AbstractController
 {
+    #[Route('/api/login_check', name: 'api_login_check')]
+    public function index(): Response
+      {
+          return $this->json([
+              "msg" => "test"
+          ]); 
+        //  if (null === $user) {
+        //     return $this->json([
+        //          'message' => 'missing credentials',
+        //      ], Response::HTTP_UNAUTHORIZED);
+        //  }
+
+        // //  $token = ; // somehow create an API token for $user
+
+        //   return $this->json([
+        //      'user'  => $user->getUserIdentifier(),
+        //     //  'token' => $token,
+        //   ]);
+      }
     // #[Route('/api/login_check', name: 'api_login_check',methods:['POST'])]
     // public function getTokenUser(ManagerRegistry $doctrine, JWTTokenManagerInterface $JWTManager, Request $request): Response
     // {
@@ -39,10 +59,11 @@ class LoginController extends AbstractController
 
     //     }else{
     //         // unauthorized
-    //         return $this->json(['message' => "User not authorized"]);
+            // return $this->json(['message' => "User not authorized"]);
     //     }
        
     //     // $jsonContent = $serializer->serialize($user,'json');
 
     // }
+    
 }
