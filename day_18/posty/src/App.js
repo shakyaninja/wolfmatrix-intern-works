@@ -5,22 +5,17 @@ import { Space } from 'antd';
 import {useEffect} from 'react';
 import Login from './components/login/login.component';
 import Createpost from './components/createpost/createpost.component';
-// import { ToastContainer } from 'react-toastify';
+import { useNavigate } from 'react-router';
+import { ToastContainer } from 'react-toast';
 const App = () => {
   const [posts,setPosts] = useState([]);
-  const [isLoggedIn,setIsLoggedIn] = useState(false);
-
-  const toggleLoginState = () => {
-    // console.log("toggled");   
-    setIsLoggedIn(true);
-  }
+  const navigate = useNavigate();
     useEffect(()=>{
       const token = localStorage.getItem('token') ? localStorage.getItem('token'): '';
 
       if(token == ''){
-        setIsLoggedIn(false);
+          navigate('./login');
       }else{
-        setIsLoggedIn(true);
         fetch(
           'http://127.0.0.1:8000/api/post',
           {
@@ -47,7 +42,7 @@ const App = () => {
 
     return (
       <div className="App">
-        {/* <ToastContainer></ToastContainer> */}
+        <ToastContainer/>
         <h1>Posty</h1>
         <Space 
         direction='vertical' 
@@ -57,7 +52,7 @@ const App = () => {
           marginLeft: '50px', 
           marginRight: '50px' 
           }}>
-          {isLoggedIn?
+          {
             posts.map((element,key)=>(
             <Post 
               key={key}
@@ -69,8 +64,7 @@ const App = () => {
               }}
               />
               ))
-          :(<Login onLogin={toggleLoginState}></Login>)}
-          {/* <Createpost></Createpost> */}
+          }
         </Space>
       </div>
     );

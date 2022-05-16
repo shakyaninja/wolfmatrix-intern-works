@@ -1,0 +1,14 @@
+.flex-block {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
+  }
+
+.w-100{
+    width: 100%;
+  }
+
+.h-100{
+    min-height: 100vh;
+}

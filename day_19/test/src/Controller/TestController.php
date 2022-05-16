@@ -11,12 +11,11 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 class TestController extends AbstractController
 {
     #[Route('/api/test', name: 'app_test')]
-    public function index(#[CurrentUser]?User $user): Response
+    public function index(#[CurrentUser] ?User $user): Response
     {
-       
         return $this->json([
-            'message' => 'Welcome to your test controller!',
-            'user' => 'user'.$user,
+            'message' => 'Welcome to your new controller!',
+            'user' => $user->getUserIdentifier()
         ]);
     }
 }

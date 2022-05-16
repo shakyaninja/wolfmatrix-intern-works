@@ -1,9 +1,16 @@
-import React from 'react'
+import React from 'react';
+
 import { Form, Input, Button, Checkbox, Space } from 'antd';
+import './login.component.css';
+import { useNavigate } from 'react-router';
+import { toast } from 'react-toast';
+// import Box from '@mui/material/Box';
+// import TextField from '@mui/material/TextField';
 
 const Login
  = (props) => {
-  const onFinish = (values: any) => {
+   const navigate = useNavigate();
+  const onFinish = (values) => {
     // fetch the login user to get token
     fetch(
         'http://127.0.0.1:8000/api/login_check',
@@ -25,56 +32,57 @@ const Login
       })
       .then((res)=>{
         localStorage.setItem('token',res.token);
-        console.log('token obtained and saved');
-        props.onLogin();
+        navigate('/');
+        toast.success('User Logged in');
     })
       .catch((err)=>{
-        console.log("error:",err);
+        toast.error(err);
       })
   };
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo);
+  const onFinishFailed = (errorInfo) => {
+    toast.error(errorInfo);
   };
 
   return (
-        <Space>
-             <Form
-                name="basic"
-                labelCol={{ span: 8 }}
-                wrapperCol={{ span: 16 }}
-                initialValues={{ remember: true }}
-                onFinish={onFinish}
-                onFinishFailed={onFinishFailed}
-                autoComplete="off"
-                >
-                    <Form.Item
-                        label="Username"
-                        name="username"
-                        rules={[{ required: true, message: 'Please input your username!' }]}
-                    >
-                        <Input />
-                    </Form.Item>
+    <div className='flex-block w-100 h-100 bg-login'>
+      <h1>Login</h1>
+      <Form
+          name="basic"
+          labelCol={{ span: 8 }}
+          wrapperCol={{ span: 16 }}
+          initialValues={{ remember: true }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
+          >
+            <Form.Item
+                label="Username"
+                name="username"
+                rules={[{ required: true, message: 'Please input your username!' }]}
+            >
+                <Input />
+            </Form.Item>
 
-                    <Form.Item
-                        label="Password"
-                        name="password"
-                        rules={[{ required: true, message: 'Please input your password!' }]}
-                    >
-                        <Input.Password />
-                    </Form.Item>
+            <Form.Item
+                label="Password"
+                name="password"
+                rules={[{ required: true, message: 'Please input your password!' }]}
+            >
+                <Input.Password />
+            </Form.Item>
 
-                    <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
-                        <Checkbox>Remember me</Checkbox>
-                    </Form.Item>
+            <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
+                <Checkbox>Remember me</Checkbox>
+            </Form.Item>
 
-                    <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                        <Button type="primary" htmlType="submit">
-                        Submit
-                        </Button>
-                    </Form.Item>
-                </Form>
-        </Space>
+            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                <Button type="primary" htmlType="submit">
+                Submit
+                </Button>
+            </Form.Item>
+      </Form>
+    </div>
   );
 };
 
